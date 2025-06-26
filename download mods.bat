@@ -3,13 +3,16 @@ chcp 65001 > nul
 chcp 1252 > nul
 setlocal enabledelayedexpansion
 rem setlocal EnableExtensions
+rem begin file name:projectid
+rem ex: sodium-fabric-0.6.13+mc1.21.5.jar -> sodium-fabric:394468
+set projectid_list=Xaeros_Minimap:263420 XaerosWorldMap:317780 fabric-api:306612 sodium-fabric:394468 iris-fabric:455508
 set versionmc="1.21.6"
-set version=1.0
 set modapi="Fabric"
+
 SET BINDIR=%~dp0mods\
 CD /D "%BINDIR%"
 rem echo %BINDIR%
-
+set version=1.0
 
 rem start
 set title=Mods downloader by Flash v%version%
@@ -24,13 +27,11 @@ if not !errorlevel! == 2 (
   echo [33mInstallation du paquet jqlang.jq...[0m
   winget install jqlang.jq
   call :pause 2
-  echo [33minstallation terminé.[0m
+  echo [33minstallation terminÃ©.[0m
 )
-rem begin file name:projectid
-rem ex: sodium-fabric-0.6.13+mc1.21.5.jar -> sodium-fabric:394468
-set projectid_list=Xaeros_Minimap:263420 XaerosWorldMap:317780 fabric-api:306612 sodium-fabric:394468 iris-fabric:455508
+
 rem get old file and add a contain to see if already exist
-echo [33mVérification des fichiers actuel ...
+echo [33mVÃ©rification des fichiers actuel ...
 set "existingmodsfiles="
 for %%i in (*.jar) do (
   set "existingmodsfiles=!existingmodsfiles!%%i "
@@ -43,7 +44,7 @@ call :pause 2
 set anynews=0
 rem loop many file
 for %%a in (%projectid_list%) do (
-  echo [33mVérification des informations pour le mod: [34m%%a[0m
+  echo [33mVÃ©rification des informations pour le mod: [34m%%a[0m
   call :pause 2
   set "modname="
   set "modid="
@@ -103,7 +104,7 @@ set fi=%2
 set fn=%3
 set url="https://www.curseforge.com/api/v1/mods/%mi%/files/%fi%/download"
 set "fn=%fn:"=%"
-echo. [35mTéléchargement du mod[33m %fn% [0m^([35mid:[33m %fi%[0m^)
+echo. [35mTÃ©lÃ©chargement du mod[33m %fn% [0m^([35mid:[33m %fi%[0m^)
 curl -s --ssl-no-revoke -A "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64)" -H "accept: application/json" -L %url% -o "%BINDIR%%fn%"
 EXIT /B 0
 :pause
