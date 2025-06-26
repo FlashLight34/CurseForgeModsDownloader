@@ -2,7 +2,7 @@
 chcp 65001 > nul
 chcp 1252 > nul
 setlocal enabledelayedexpansion
-rem setlocal EnableExtensions
+
 rem begin file name:projectid
 rem ex: sodium-fabric-0.6.13+mc1.21.5.jar -> sodium-fabric:394468
 set projectid_list=Xaeros_Minimap:263420 XaerosWorldMap:317780 fabric-api:306612 sodium-fabric:394468 iris-fabric:455508
@@ -21,13 +21,13 @@ echo [36m======================================[0m
 echo [36m==== [35m%title% [36m===[0m
 echo [36m======================================[0m
 
-rem add jq if not exist
+rem add jq if not exist important to take infos in .json files
 jq -version > nul 2>&1
 if not !errorlevel! == 2 (
   echo [33mInstallation du paquet jqlang.jq...[0m
   winget install jqlang.jq
   call :pause 2
-  echo [33minstallation terminé.[0m
+  echo [33mInstallation terminé.[0m
 )
 
 rem get old file and add a contain to see if already exist
@@ -42,7 +42,7 @@ for %%a in (%projectid_list%) do set /a count=!count!+1
 echo [33mIl y a[34m !count! [33mmods...
 call :pause 2
 set anynews=0
-rem loop many file
+rem loop each mod
 for %%a in (%projectid_list%) do (
   echo [33mVérification des informations pour le mod: [34m%%a[0m
   call :pause 2
