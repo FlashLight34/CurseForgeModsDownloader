@@ -31,7 +31,7 @@ if not !errorlevel! == 2 (
 )
 
 rem get old file and add a contain to see if already exist
-echo [33mVérification des fichiers actuel ...
+echo [33mVérification des fichiers actuel ...[0m
 set "existingmodsfiles="
 for %%i in (*.jar) do (
   set "existingmodsfiles=!existingmodsfiles!%%i "
@@ -39,7 +39,7 @@ for %%i in (*.jar) do (
 rem count many mod
 set /a count=0
 for %%a in (%projectid_list%) do set /a count=!count!+1
-echo [33mIl y a[34m !count! [33mmods...
+echo [33mIl y a[34m !count! [33mmods...[0m
 call :pause 2
 set anynews=0
 rem loop each mod
