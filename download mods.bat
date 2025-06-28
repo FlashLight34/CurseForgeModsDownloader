@@ -62,7 +62,6 @@ for %%a in (%projectid_list%) do (
   set cmd='jq -s ".[0] | .fileName" !filemodinfos!'
   for /F "delims=" %%a in (!cmd!) do set "filename=%%a"
   rem verify if exist
-  rem if !filemodinfos!
   set size=0
   FOR %%I in (!filemodinfos!) do set size=%%~zI
   if !size! == 0 (
