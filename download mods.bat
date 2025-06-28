@@ -3,7 +3,8 @@ chcp 65001 > nul
 chcp 1252 > nul
 setlocal enabledelayedexpansion
 
-rem begin file name:projectid
+rem begin_file_name:projectid
+rem the name is very important for the part of delete old file.
 rem ex: sodium-fabric-0.6.13+mc1.21.5.jar -> sodium-fabric:394468
 set projectid_list=Xaeros_Minimap:263420 XaerosWorldMap:317780 fabric-api:306612 sodium-fabric:394468 iris-fabric:455508
 set versionmc="1.21.6"
@@ -71,7 +72,7 @@ for %%a in (%projectid_list%) do (
   if !size! NEQ 0 (
     echo !existingmodsfiles! | findstr /ilC:!filename! > nul 2>&1
     if !errorlevel! == 1 (
-      set anynews=1
+      set /a anynews=!anynews!+1
       echo. [36mNouvelle version![0m
       call :pause 1
       call :deleteoldfile !modname!
@@ -84,8 +85,9 @@ for %%a in (%projectid_list%) do (
   rem delete temporary json
   del !filemodinfos!
 )
-if !anynews! == 0 echo [32mRien de nouveau, fermeture.[0m
-if !anynews! == 1 echo [33mIl y a eu du nouveau, fermeture.[0m
+if !anynews! == 0 echo [32mRien de nouveau, a plus.[0m
+if !anynews! == 1 echo [33mIl y a eu du nouveau, a plus.[0m
+if !anynews! >= 1 echo [33mIl y a eu !anynews! mise a jour, a plus.[0m
 call :pause 5
 
 endlocal
