@@ -85,9 +85,9 @@ for %%a in (%projectid_list%) do (
   rem delete temporary json
   del !filemodinfos!
 )
-if !anynews! == 0 echo [32mRien de nouveau, a plus.[0m
-if !anynews! == 1 echo [33mIl y a eu du nouveau, a plus.[0m
-if !anynews! >= 1 echo [33mIl y a eu !anynews! mise a jour, a plus.[0m
+if !anynews! EQU 0 echo [32mRien de nouveau, a plus.[0m
+if !anynews! EQU 1 echo [33mIl y a eu du nouveau, a plus.[0m
+if !anynews! GTR 1 echo [33mIl y a eu !anynews! mise a jour, a plus.[0m
 call :pause 5
 
 endlocal
