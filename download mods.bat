@@ -59,10 +59,14 @@ for %%a in (%projectid_list%) do (
   rem get infos in .json file
   set "fileid="
   set "filename="
+  set "datemodified="
   set cmd='jq -s ".[0] | .id" !filemodinfos!'
   for /F "delims=" %%a in (!cmd!) do set "fileid=%%a"
   set cmd='jq -s ".[0] | .fileName" !filemodinfos!'
   for /F "delims=" %%a in (!cmd!) do set "filename=%%a"
+  set cmd='jq -s ".[0] | .dateModified" !filemodinfos!'
+  for /F "delims=" %%a in (!cmd!) do set "datemodified=%%a"
+
   rem verify if exist
   set size=0
   FOR %%I in (!filemodinfos!) do set size=%%~zI
@@ -75,7 +79,7 @@ for %%a in (%projectid_list%) do (
     echo !existingmodsfiles! | findstr /ilC:!filename! > nul 2>&1
     if !errorlevel! == 1 (
       set /a anynews=!anynews!+1
-      echo. [36mNouvelle version![0m
+      echo. [36mNouvelle version! [0m([34m!datemodified![0m)
       call :pause 1
       call :deleteoldfile !modname!
       call :pause 1
