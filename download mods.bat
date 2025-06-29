@@ -27,11 +27,12 @@ jq -version > nul 2>&1
 if not !errorlevel! == 2 (
   echo [33mInstallation du paquet jqlang.jq...[0m
   winget install jqlang.jq
-  call :pause 2
+  call :pause 1
   echo [33mInstallation terminé.[0m
+  call :pause 2
 )
 
-rem get old file and add a contain to see if already exist
+rem get old file and add it to see if already exist
 echo [33mVérification des fichiers actuel ...[0m
 set "existingmodsfiles="
 for %%i in (*.jar) do (
@@ -55,7 +56,7 @@ for %%a in (%projectid_list%) do (
   set url="https://www.curseforge.com/api/v1/mods/!modid!/files?pageIndex=0&pageSize=20&sort=dateCreated&sortDescending=true&removeAlphas=true&gameVersionTypeId=4"
   curl -s --ssl-no-revoke -L !url! | jq -r ".data[] | select(.gameVersions | tostring | contains(\"!versionmc!\") and contains(\"!modapi!\"))" >!filemodinfos!
   call :pause 1
-  rem recheche des infos dans le fichier
+  rem get infos in .json file
   set "fileid="
   set "filename="
   set cmd='jq -s ".[0] | .id" !filemodinfos!'
@@ -67,6 +68,7 @@ for %%a in (%projectid_list%) do (
   FOR %%I in (!filemodinfos!) do set size=%%~zI
   if !size! == 0 (
     echo. [31mInformations introuvable[36m !versionmc! [31mou le mod API[36m !modapi! [31minexistant![0m
+    call :pause 2
   )
   rem download the file
   if !size! NEQ 0 (
@@ -81,7 +83,6 @@ for %%a in (%projectid_list%) do (
       call :pause 2
     )
   )
-
   rem delete temporary json
   del !filemodinfos!
 )
