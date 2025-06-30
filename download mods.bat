@@ -13,7 +13,7 @@ set modapi="Fabric"
 SET BINDIR=%~dp0mods\
 CD /D "%BINDIR%"
 rem echo %BINDIR%
-set version=1.0
+set version=1.1
 
 rem start
 set title=Mods downloader by Flash v%version%
@@ -42,6 +42,7 @@ rem count many mod
 set /a count=0
 for %%a in (%projectid_list%) do set /a count=!count!+1
 echo [33mIl y a[34m !count! [33mmods...[0m
+echo.
 call :pause 2
 set anynews=0
 rem loop each mod
@@ -53,10 +54,11 @@ for %%a in (%projectid_list%) do (
   for /F "tokens=1 delims=:" %%b in ("%%a") do set "modname=%%b"
   for /F "tokens=2 delims=:" %%b in ("%%a") do set "modid=%%b"
   set filemodinfos=modfile_!modname!.json
+  rem download .json
   set url="https://www.curseforge.com/api/v1/mods/!modid!/files?pageIndex=0&pageSize=20&sort=dateCreated&sortDescending=true&removeAlphas=true&gameVersionTypeId=4"
   curl -s --ssl-no-revoke -L !url! | jq -r ".data[] | select(.gameVersions | tostring | contains(\"!versionmc!\") and contains(\"!modapi!\"))" >!filemodinfos!
   call :pause 1
-  rem get infos in .json file
+  rem get infos from .json file with jqlang
   set "fileid="
   set "filename="
   set "datemodified="
@@ -66,7 +68,8 @@ for %%a in (%projectid_list%) do (
   for /F "delims=" %%a in (!cmd!) do set "filename=%%a"
   set cmd='jq -s ".[0] | .dateModified" !filemodinfos!'
   for /F "delims=" %%a in (!cmd!) do set "datemodified=%%a"
-
+  set "datemodified=!datemodified:"=!"
+  for /F "tokens=1 delims=T" %%b in ("!datemodified!") do set "datemodified=%%b"
   rem verify if exist
   set size=0
   FOR %%I in (!filemodinfos!) do set size=%%~zI
@@ -79,20 +82,21 @@ for %%a in (%projectid_list%) do (
     echo !existingmodsfiles! | findstr /ilC:!filename! > nul 2>&1
     if !errorlevel! == 1 (
       set /a anynews=!anynews!+1
-      echo. [36mNouvelle version! [0m([34m!datemodified![0m)
-      call :pause 1
+      echo. [36mNouvelle version [0m^([32m!datemodified![0m^)
+      call :pause 2
       call :deleteoldfile !modname!
-      call :pause 1
+      call :pause 2
       call :downloadmod !modid! !fileid! !filename!
       call :pause 2
     )
   )
   rem delete temporary json
   del !filemodinfos!
+  echo.
 )
 if !anynews! EQU 0 echo [32mRien de nouveau, a plus.[0m
 if !anynews! EQU 1 echo [33mIl y a eu du nouveau, a plus.[0m
-if !anynews! GTR 1 echo [33mIl y a eu !anynews! mise a jour, a plus.[0m
+if !anynews! GTR 1 echo [33mIl y a eu[36m !anynews! [33mmise a jour, a plus.[0m
 call :pause 5
 
 endlocal
