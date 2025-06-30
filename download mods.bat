@@ -61,7 +61,7 @@ for %%a in (%projectid_list%) do (
   set url="https://www.curseforge.com/api/v1/mods/!modid!/files?pageIndex=0&pageSize=20&sort=dateCreated&sortDescending=true&removeAlphas=true&gameVersionTypeId=4"
   rem only take versionmc and modapi without snapshot
   rem a testé avec releaseType == 1
-  curl -s --ssl-no-revoke -L !url! | jq -r ".data[] | select(.gameVersions | tostring | contains(\"snapshot\") | not) | select(.gameVersions | tostring | contains(\"!versionmc!\") and contains(\"!modapi!\"))" >!filemodinfos!
+  curl -s --ssl-no-revoke -L !url! | jq -r ".data[] | select(.releaseType == 1) | select(.gameVersions | tostring | contains(\"!versionmc!\") and contains(\"!modapi!\"))" >!filemodinfos!
   call :pause 1
   rem get infos from .json file with jqlang
   set "fileid="
