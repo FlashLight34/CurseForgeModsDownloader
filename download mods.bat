@@ -20,7 +20,7 @@ echo [36m======================================[0m
 SET BINDIR=%~dp0mods\
 rem create mods dir if not exist
 if not exist %BINDIR% (
-  echo [33mCréation du dossier mods.[0m
+  echo [33mCrÃ©ation du dossier mods.[0m
   md .\mods
 )
 CD /D "%BINDIR%"
@@ -31,12 +31,12 @@ if not !errorlevel! == 2 (
   echo [33mInstallation du paquet jqlang.jq...[0m
   winget install jqlang.jq
   call :pause 1
-  echo [33mInstallation terminé.[0m
+  echo [33mInstallation terminÃ©.[0m
   call :pause 2
 )
 
 rem get old file and add it to see if already exist
-echo [33mVérification des fichiers actuel ...[0m
+echo [33mVÃ©rification des fichiers actuel ...[0m
 set "existingmodsfiles="
 for %%i in (*.jar) do (
   set "existingmodsfiles=!existingmodsfiles!%%i "
@@ -50,7 +50,7 @@ call :pause 2
 set anynews=0
 rem loop each mod
 for %%a in (%projectid_list%) do (
-  echo [33mVérification des informations pour le mod: [34m%%a[0m
+  echo [33mVÃ©rification des informations pour le mod: [34m%%a[0m
   call :pause 2
   set "modname="
   set "modid="
@@ -60,6 +60,7 @@ for %%a in (%projectid_list%) do (
   rem download .json
   set url="https://www.curseforge.com/api/v1/mods/!modid!/files?pageIndex=0&pageSize=20&sort=dateCreated&sortDescending=true&removeAlphas=true&gameVersionTypeId=4"
   rem only take versionmc and modapi without snapshot
+  rem a testÃ© avec releaseType == 1
   curl -s --ssl-no-revoke -L !url! | jq -r ".data[] | select(.gameVersions | tostring | contains(\"snapshot\") | not) | select(.gameVersions | tostring | contains(\"!versionmc!\") and contains(\"!modapi!\"))" >!filemodinfos!
   call :pause 1
   rem get infos from .json file with jqlang
@@ -118,7 +119,7 @@ set fi=%2
 set fn=%3
 set url="https://www.curseforge.com/api/v1/mods/%mi%/files/%fi%/download"
 set "fn=%fn:"=%"
-echo. [35mTéléchargement du mod[33m %fn% [0m^([35mid:[33m %fi%[0m^)
+echo. [35mTÃ©lÃ©chargement du mod[33m %fn% [0m^([35mid:[33m %fi%[0m^)
 curl -s --ssl-no-revoke -A "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64)" -H "accept: application/json" -L %url% -o "%BINDIR%%fn%"
 EXIT /B 0
 :pause
