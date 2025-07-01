@@ -59,9 +59,8 @@ for %%a in (%projectid_list%) do (
   set filemodinfos=modfile_!modname!.json
   rem download .json
   set url="https://www.curseforge.com/api/v1/mods/!modid!/files?pageIndex=0&pageSize=20&sort=dateCreated&sortDescending=true&removeAlphas=true&gameVersionTypeId=4"
-  rem only take versionmc and modapi without snapshot
-  rem a testé avec releaseType == 1
-  curl -s --ssl-no-revoke -L !url! | jq -r ".data[] | select(.releaseType == 1) | select(.gameVersions | tostring | contains(\"!versionmc!\") and contains(\"!modapi!\"))" >!filemodinfos!
+  rem only take versionmc and modapi without snapshot, check version in filename to 
+  curl -s --ssl-no-revoke -L !url! | jq -r ".data[] | select(.fileName | tostring | contains(\"!versionmc!\")) | select(.gameVersions | tostring | contains(\"!versionmc!\") and contains(\"!modapi!\"))" >!filemodinfos!
   call :pause 1
   rem get infos from .json file with jqlang
   set "fileid="
