@@ -95,7 +95,7 @@ for %%a in (%projectid_list%) do (
       call :pause 2
     )
     if !result! NEQ 1 (
-      echo. Dernière version: !filename!
+      echo. Dernière version: [32m!filename![0m
     )
   )
   rem delete temporary json
