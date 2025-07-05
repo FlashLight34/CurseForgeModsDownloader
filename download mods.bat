@@ -84,7 +84,8 @@ for %%a in (%projectid_list%) do (
   rem download the file
   if !size! NEQ 0 (
     echo !existingmodsfiles! | findstr /ilC:!filename! > nul 2>&1
-    if !errorlevel! == 1 (
+    set result=!errorlevel!
+    if !result! EQU 1 (
       set /a anynews=!anynews!+1
       echo. [36mNouvelle version [0m^([32m!datemodified![0m^)
       call :pause 2
@@ -92,6 +93,9 @@ for %%a in (%projectid_list%) do (
       call :pause 2
       call :downloadmod !modid! !fileid! !filename!
       call :pause 2
+    )
+    if !result! NEQ 1 (
+      echo. Dernière version: !filename!
     )
   )
   rem delete temporary json
