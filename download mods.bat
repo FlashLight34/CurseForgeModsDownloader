@@ -62,18 +62,6 @@ for %%a in (%projectid_list%) do (
   rem only take versionmc and modapi without snapshot, check version in filename to 
   curl -s --ssl-no-revoke -L !url! | jq -r ".data[] | select(.fileName | tostring | contains(\"!versionmc!\")) | select(.gameVersions | tostring | contains(\"!versionmc!\") and contains(\"!modapi!\"))" >!filemodinfos!
   call :pause 1
-  rem get infos from .json file with jqlang
-  set "fileid="
-  set "filename="
-  set "datemodified="
-  set cmd='jq -s ".[0] | .id" !filemodinfos!'
-  for /F "delims=" %%a in (!cmd!) do set "fileid=%%a"
-  set cmd='jq -s ".[0] | .fileName" !filemodinfos!'
-  for /F "delims=" %%a in (!cmd!) do set "filename=%%a"
-  set cmd='jq -s ".[0] | .dateModified" !filemodinfos!'
-  for /F "delims=" %%a in (!cmd!) do set "datemodified=%%a"
-  set "datemodified=!datemodified:"=!"
-  for /F "tokens=1 delims=T" %%b in ("!datemodified!") do set "datemodified=%%b"
   rem verify if exist
   set size=0
   FOR %%I in (!filemodinfos!) do set size=%%~zI
@@ -81,10 +69,23 @@ for %%a in (%projectid_list%) do (
     echo. [31mInformations introuvable[36m !versionmc! [31mou le mod API[36m !modapi! [31minexistant![0m
     call :pause 2
   )
-  rem download the file
+  rem the file infos is valid
   if !size! NEQ 0 (
+    rem get infos from .json file with jqlang
+    set "fileid="
+    set "filename="
+    set "datemodified="
+    set cmd='jq -s ".[0] | .id" !filemodinfos!'
+    for /F "delims=" %%a in (!cmd!) do set "fileid=%%a"
+    set cmd='jq -s ".[0] | .fileName" !filemodinfos!'
+    for /F "delims=" %%a in (!cmd!) do set "filename=%%a"
+    set cmd='jq -s ".[0] | .dateModified" !filemodinfos!'
+    for /F "delims=" %%a in (!cmd!) do set "datemodified=%%a"
+    set "datemodified=!datemodified:"=!"
+    for /F "tokens=1 delims=T" %%b in ("!datemodified!") do set "datemodified=%%b"
     echo !existingmodsfiles! | findstr /ilC:!filename! > nul 2>&1
     set result=!errorlevel!
+    rem download the file if is new
     if !result! EQU 1 (
       set /a anynews=!anynews!+1
       echo. [36mNouvelle version [0m^([32m!datemodified![0m^)
