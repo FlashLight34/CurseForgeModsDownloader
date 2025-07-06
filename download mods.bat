@@ -54,8 +54,11 @@ for %%a in (%projectid_list%) do (
   call :pause 2
   set "modname="
   set "modid="
-  for /F "tokens=1 delims=:" %%b in ("%%a") do set "modname=%%b"
-  for /F "tokens=2 delims=:" %%b in ("%%a") do set "modid=%%b"
+  for /F "tokens=1,2 delims=:" %%b in ("%%a") do (
+    set "modname=%%b"
+    set "modid=%%c"
+  )
+  rem for /F "tokens=2 delims=:" %%b in ("%%a") do set "modid=%%b"
   set filemodinfos=modfile_!modname!.json
   rem download .json
   set url="https://www.curseforge.com/api/v1/mods/!modid!/files?pageIndex=0&pageSize=20&sort=dateCreated&sortDescending=true&removeAlphas=true&gameVersionTypeId=4"
