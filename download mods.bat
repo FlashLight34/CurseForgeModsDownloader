@@ -26,7 +26,7 @@ if not exist %BINDIR% (
 CD /D "%BINDIR%"
 
 rem add jq if not exist important to take infos in .json files
-jq -version > nul 2>&1
+jq > nul 2>&1
 if not !errorlevel! == 2 (
   echo [33mInstallation du paquet jqlang.jq...[0m
   winget install jqlang.jq
