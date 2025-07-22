@@ -11,7 +11,7 @@ set versionmc="1.21.6"
 set modapi="Fabric"
 
 rem start
-set version=1.2
+set version=1.3
 set title=Mods downloader by Flash v%version%
 title %title%
 echo [36m======================================[0m
