@@ -9,6 +9,7 @@ rem ex: sodium-fabric-0.6.13+mc1.21.5.jar -> sodium-fabric:394468
 rem set projectid_list=Xaeros_Minimap:263420 XaerosWorldMap:317780 fabric-api:306612 sodium-fabric:394468 iris-fabric:455508
 set versionmc=""
 set modapi=""
+set dontdeleteinfosfiles=0
 set cfgfile=..\download_mods_config.txt
 rem start
 set version=1.0
@@ -20,7 +21,7 @@ echo [36m======================================[0m
 SET BINDIR=%~dp0mods\
 rem create mods dir if not exist
 if not exist %BINDIR% (
-  echo [33mCréation du dossier mods.[0m
+  echo [33mCrÃ©ation du dossier mods.[0m
   md .\mods
 )
 CD /D "%BINDIR%"
@@ -32,7 +33,7 @@ if not !errorlevel! == 2 (
   winget uninstall jqlang.jq --nowarn -h
   call :pause 2
   winget install jqlang.jq
-  echo [33mInstallation terminé. Veuillez redemarré.[0m
+  echo [33mInstallation terminÃ©. Veuillez redemarrÃ©.[0m
   call :pause 5
   rem start "" "%~f0"
   exit /b 0
@@ -40,7 +41,7 @@ if not !errorlevel! == 2 (
 rem read config file
 rem  create config
 if not exist %cfgfile% (
-  echo [31mFichier de Configuration non trouvé...[0m
+  echo [31mFichier de Configuration non trouvÃ©...[0m
   (echo #the begin file name is very important to the part of delete old file.
   echo #ex: sodium-fabric-0.6.13^+mc1.21.5.jar -^> sodium-fabric:394468
   echo #first line mc version and second line mod API (case sensitive^)
@@ -50,7 +51,7 @@ if not exist %cfgfile% (
   echo #The project ID can be found on curseforge.com mod page
   echo fabric-api:306612) > !cfgfile!
   call :pause 1
-  echo [32mFichier de Configuration créer, édité-le avant de continuer...[0m
+  echo [32mFichier de Configuration crÃ©er, Ã©ditÃ©-le avant de continuer...[0m
   call :pause 1
   start "" %cfgfile%
   pause
@@ -73,7 +74,7 @@ call :pause 2
 set anynews=0
 rem loop each mod
 for %%a in (%projectid_list%) do (
-  echo [33mVérification des informations pour le mod: [37m%%a[0m
+  echo [33mVÃ©rification des informations pour le mod: [37m%%a[0m
   call :pause 1
   set "modname="
   set "modid="
@@ -104,15 +105,18 @@ for %%a in (%projectid_list%) do (
     
     call :readinfos .displayName filedp
     call :readinfos .fileName filename
+    call :readinfos .gameVersions gversions
+    set gversions=!gversions:\=!
     call :readinfos .dateModified datemodified
     set "datemodified=!datemodified:"=!"
     for /F "tokens=1 delims=T" %%b in ("!datemodified!") do set "datemodified=%%b"
     rem see last file
     echo. [36m!filedp:"=![0m
+    echo. [95m!gversions:"=![0m
     echo. [33mDerniere version[37m !filename:"=! [0m^([32m!datemodified![0m^)
   )
   rem delete temporary json
-  del !filemodinfos!
+  if %dontdeleteinfosfiles% NEQ 1 del !filemodinfos!
   echo.
 )
 call :decompteXsecs 15
@@ -124,7 +128,7 @@ endlocal
 EXIT /B 0
 :readinfos
   set %2=
-  set cmd='jq -s ".[0] | %1" !filemodinfos!'
+  set cmd='jq -s ".[0] | %1 | tostring" !filemodinfos!'
   for /F "delims=" %%a in (!cmd!) do set %2=%%a
 EXIT /B 0
 :pause
@@ -138,4 +142,5 @@ for /l %%x in (%num%, -1, 0) do (
   ping 127.0.0.1 -n 2 > nul
 )
 echo.
+
 GOTO :EOF
