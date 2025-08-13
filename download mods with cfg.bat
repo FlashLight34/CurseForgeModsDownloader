@@ -21,14 +21,14 @@ echo [36m======================================[0m
 SET BINDIR=%~dp0mods\
 rem create mods dir if not exist
 if not exist %BINDIR% (
-  echo [33mCréation du dossier mods.[0m
+  echo [33mCrÃ©ation du dossier mods.[0m
   md .\mods
 )
 CD /D "%BINDIR%"
 
 rem  create config file
 if not exist %cfgfile% (
-  echo [31mFichier de Configuration non trouvé...[0m
+  echo [31mFichier de Configuration non trouvÃ©...[0m
   (echo #the begin file name is very important to the part of delete old file.
   echo #ex: sodium-fabric-0.6.13^+mc1.21.5.jar -^> sodium-fabric:394468
   echo #first line mc version and second line mod API (case sensitive^)
@@ -38,7 +38,7 @@ if not exist %cfgfile% (
   echo #The project ID can be found on curseforge.com mod page
   echo fabric-api:306612) > !cfgfile!
   call :pause 1
-  echo [32mFichier de Configuration créer, édité-le avant de continuer...[0m
+  echo [32mFichier de Configuration crÃ©er, Ã©ditÃ©-le avant de continuer...[0m
   call :pause 1
   start "" %cfgfile%
   pause
@@ -60,12 +60,12 @@ if not !errorlevel! == 2 (
   echo [33mInstallation du paquet jqlang.jq...[0m
   winget install jqlang.jq
   call :pause 1
-  echo [33mInstallation terminé.[0m
+  echo [33mInstallation terminÃ©.[0m
   call :pause 2
 )
 
 rem get old file and add it to see if already exist
-echo [33mVérification des fichiers actuel ...[0m
+echo [33mVÃ©rification des fichiers actuel ...[0m
 set "existingmodsfiles="
 for %%i in (*.jar) do (
   set "existingmodsfiles=!existingmodsfiles!%%i "
@@ -79,7 +79,7 @@ call :pause 2
 set anynews=0
 rem loop each mod
 for %%a in (%projectid_list%) do (
-  echo [33mVérification des informations pour le mod: [37m%%a[0m
+  echo [33mVÃ©rification des informations pour le mod: [37m%%a[0m
   call :pause 2
   set "modname="
   set "modid="
@@ -91,8 +91,9 @@ for %%a in (%projectid_list%) do (
   set filemodinfos=modfile_!modname!.json
   rem download .json
   set url="https://www.curseforge.com/api/v1/mods/!modid!/files?pageIndex=0&pageSize=20&sort=dateCreated&sortDescending=true&removeAlphas=true&gameVersionTypeId=4"
-  rem only take versionmc and modapi without snapshot, check version in filename to 
-  curl -s --ssl-no-revoke -L !url! | jq -r ".data[] | select(.fileName | tostring | contains(\"!versionmc!\")) | select(.gameVersions | tostring | contains(\"!versionmc!\") and contains(\"!modapi!\"))" >!filemodinfos!
+  rem only take versionmc and modapi without snapshot
+  rem not work in other case like multi version select(.fileName | tostring | contains(\"!versionmc!\"))
+  curl -s --ssl-no-revoke -L !url! | jq -r ".data[] | select(.gameVersions | tostring | contains(\"!versionmc!\") and contains(\"!modapi!\"))" >!filemodinfos!
   call :pause 1
   rem verify if exist
   set size=0
@@ -126,7 +127,7 @@ for %%a in (%projectid_list%) do (
       call :pause 2
     )
     if !result! NEQ 1 (
-      echo. Dernière version: [32m!filename:"=![0m
+      echo. DerniÃ¨re version: [32m!filename:"=![0m
     )
   )
   rem delete temporary json
@@ -157,9 +158,10 @@ set fi=%2
 set fn=%3
 set url="https://www.curseforge.com/api/v1/mods/%mi%/files/%fi%/download"
 set "fn=%fn:"=%"
-echo. [35mTéléchargement du mod[33m %fn% [0m^([35mid:[33m %fi%[0m^)
+echo. [35mTÃ©lÃ©chargement du mod[33m %fn% [0m^([35mid:[33m %fi%[0m^)
 curl -s --ssl-no-revoke -A "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64)" -H "accept: application/json" -L %url% -o "%BINDIR%%fn%"
 EXIT /B 0
 :pause
 ping 127.0.0.1 -n %1 > nul
+
 EXIT /B 0
