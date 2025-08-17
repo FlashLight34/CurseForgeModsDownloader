@@ -38,7 +38,7 @@ if not !errorlevel! == 2 (
   rem start "" "%~f0"
   exit /b 0
 )
-rem read config file
+
 rem  create config
 if not exist %cfgfile% (
   echo [31mFichier de Configuration non trouvé...[0m
@@ -56,6 +56,7 @@ if not exist %cfgfile% (
   start "" %cfgfile%
   pause
 )
+rem read config file
 set line=1
 for /F "eol=# " %%a in (%cfgfile%) do (
   if !line! == 1 set versionmc="%%a"
@@ -144,3 +145,4 @@ for /l %%x in (%num%, -1, 0) do (
 echo.
 
 GOTO :EOF
+
