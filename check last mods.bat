@@ -1,6 +1,6 @@
 @ECHO Off
 chcp 65001 > nul
-chcp 1252 > nul
+rem chcp 1252 > nul
 setlocal enabledelayedexpansion
 
 rem begin_file_name:projectid
@@ -145,4 +145,5 @@ for /l %%x in (%num%, -1, 0) do (
 echo.
 
 GOTO :EOF
+
 
