@@ -59,9 +59,10 @@ if not !errorlevel! == 2 (
   winget uninstall jqlang.jq --nowarn
   echo [33mInstallation du paquet jqlang.jq...[0m
   winget install jqlang.jq
-  call :pause 1
-  echo [33mInstallation terminé.[0m
-  call :pause 2
+  echo [33mInstallation terminé. Veuillez redemarré.[0m
+  call :pause 5
+  rem start "" "%~f0"
+  exit /b 0
 )
 
 rem get old file and add it to see if already exist
@@ -165,3 +166,4 @@ EXIT /B 0
 ping 127.0.0.1 -n %1 > nul
 
 EXIT /B 0
+
