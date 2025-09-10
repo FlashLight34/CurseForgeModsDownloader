@@ -1,6 +1,6 @@
 @ECHO Off
 chcp 65001 > nul
-chcp 1252 > nul
+rem chcp 1252 > nul
 setlocal enabledelayedexpansion
 
 rem begin_file_name:projectid
@@ -166,4 +166,5 @@ EXIT /B 0
 ping 127.0.0.1 -n %1 > nul
 
 EXIT /B 0
+
 
